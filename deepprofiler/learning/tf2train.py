@@ -127,7 +127,7 @@ def setup_callbacks(config, strategy_lr):
         period=period
     )
     callbacks.append(callback_model_checkpoint)
-    
+    epochs = config["train"]["model"]["epochs"]
     if "lr_schedule" in config["train"]["model"]:
         if config["train"]["model"]["lr_schedule"] == "cosine":
             lr_schedule_epochs = [x for x in range(epochs)]
