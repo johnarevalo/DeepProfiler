@@ -188,6 +188,7 @@ def learn_model(config, epoch):
     experiment = setup_comet_ml(config)
     single_cell_metadata = pd.read_csv(os.path.join(config["paths"]["single_cell_sample"], "expanded_sc_metadata.csv"))
     single_cell_metadata = single_cell_metadata[["Class_Name", "Image_Name", "Training_Status"]]
+    single_cell_metadata = single_cell_metadata[single_cell_metadata["Training_Status"].isin(["SingleCellTraining", "SingleCellValidation"])]
     
     num_classes = len(pd.unique(single_cell_metadata["Class_Name"]))
     single_cell_metadata["Categorical"] = pd.Categorical(single_cell_metadata["Class_Name"]).codes
