@@ -32,15 +32,15 @@ def make_dataset(path, batch_size, single_cell_metadata, config, is_training):
 
     def configure_for_performance(ds, is_training):
         ds = ds.shuffle(buffer_size=20000)
-        #if is_training:
-        #    ds = augment(ds)
+        if is_training:
+            ds = augment(ds)
 
         ds = ds.batch(batch_size)
         ds = ds.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
         return ds
 
     def random_illumination(image):
-        if tf.less(tf.random.uniform([], minval=0, maxval=1, dtype=tf.float32), tf.cast(0.5, tf.float32)):
+        if tf.less(tf.random.uniform([], minval=0, maxval=1, dtype=tf.float32), tf.cast(0.9, tf.float32)):
         # Make channels independent images
             numchn = len(config["dataset"]["images"]["channels"])
             source = tf.transpose(image, [2, 1, 0])
@@ -68,9 +68,9 @@ def make_dataset(path, batch_size, single_cell_metadata, config, is_training):
             size = tf.random.uniform([1], minval=int(w * 0.6), maxval=w, dtype=tf.int32)
             image = tf.image.random_crop(image, [size[0], size[0], c])
         else:
-            image = tfa.image.rotate(image, tf.constant(np.pi / 9))
+            image = tfa.image.rotate(image, np.pi / tf.random.uniform(shape=[], minval=1, maxval=10, dtype=tf.float32))
             image = tf.reshape(image, (w, h, c))
-            image = tf.image.central_crop(image, 0.8)
+            image = tf.image.central_crop(image, 0.7)
         return tf.image.resize(image, (w, h))
 
     def augment(ds):
