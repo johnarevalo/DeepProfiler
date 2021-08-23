@@ -163,6 +163,14 @@ def train(context, epoch, seed):
     deepprofiler.learning.training.learn_model(context.obj["config"], dset, epoch, seed)
 
 
+# Train a network with TF dataset and multi-GPU support
+@cli.command()
+@click.option("--epoch", default=1)
+@click.pass_context
+def traintf2(context, epoch):
+    deepprofiler.learning.training.learn_model(context.obj["config"], epoch)
+
+
 # Fourth tool: Profile cells and extract features
 @cli.command()
 @click.pass_context
