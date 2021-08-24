@@ -259,6 +259,7 @@ def learn_model(config, epoch):
 
     elif epoch > 1:
         output_file = config["paths"]["checkpoints"] + "/checkpoint_{epoch:04d}.hdf5"
+        previous_model = output_file.format(epoch=epoch - 1)
         model.load_weights(output_file)
 
     print(model.summary())
